@@ -1,10 +1,37 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  margin: 0;
 }
 
+main {
+  display: grid;
+  justify-items: center;
+}
+
+.main-page___nav {
+  grid-row: 1;
+  display: grid;
+  align-items: center;
+  text-align: center;
+  grid-template-columns: repeat(5, 1fr);
+  height: 70px;
+  background-color: rgb(26, 101, 158);
+  margin-bottom: 10px;
+}
+
+.main-page___nav-icon {
+  grid-column: 1/2;
+  padding-left: 10px;
+}
+
+.main-page___nav-link-one {
+  grid-column: 4/5;
+}
+
+.main-page___nav-link-two {
+  grid-column: 5/6;
+}
+
+/*
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +66,4 @@
 
 .read-the-docs {
   color: #888;
-}
+} */
