@@ -1,0 +1,30 @@
+.todo-list-table {
+    border-radius: 10px;
+    padding-top: 3px;
+    width: max-content;
+    display: grid;
+    grid-template-rows: minmax(50px, auto);
+    /* grid-template-columns: max-content; */
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    background: rgb(255, 107, 53);
+}
+
+.todo-list-table___column {
+    display: grid;
+    grid-template-columns: repeat(4, 200px);
+    grid-template-rows: 30px;
+}
+
+.todo-list-table___column-headings {
+    height: 100%;
+}
+
+.todo-list-table___row {
+    background: rgb(247, 197, 159);
+}
+
+.todo-list-table___row:hover{
+    box-shadow: 0px 0px 10px rgb(247, 154, 67) inset;
+}
