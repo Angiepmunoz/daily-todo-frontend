@@ -4,6 +4,7 @@ body {
 
 main {
   display: grid;
+  grid-template-columns: repeat(5, 1fr);
   justify-items: center;
 }
 
@@ -14,7 +15,7 @@ main {
   text-align: center;
   grid-template-columns: repeat(5, 1fr);
   height: 70px;
-  background-color: rgb(26, 101, 158);
+  background-color: rgb(0, 78, 137);
   margin-bottom: 10px;
 }
 
