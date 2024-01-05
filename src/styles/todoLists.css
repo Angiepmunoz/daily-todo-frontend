@@ -1,6 +1,5 @@
 .todo-list-table {
     grid-column: 2/5;
-    /* grid-row-start: 2; */
     border-radius: 10px;
     padding-top: 3px;
     width: max-content;
