@@ -4,7 +4,7 @@ import { modifyDate } from "../helpers/modifyDate";
 import axios from "axios";
 import "../styles/TaskModal.css";
 
-export default function TaskModal({ task }) {
+export default function TaskModal({ task, setCurrentModal }) {
   // const [task, setTask] = useState({});
   // const { id } = useParams();
   // useEffect(() => {
@@ -15,9 +15,12 @@ export default function TaskModal({ task }) {
   //       setTask(tasksWithModifiedDate);
   //     });
   // });
+  function handleModalClose(){
+    setCurrentModal({});
+  }
 
   return (
-    <div className="view-task">
+    <div className="view-task" onClick={handleModalClose}>
       <div className="view-task___content">
         <div className="view-task___header">
           <h3 className="view-task___header-name">{task.name}</h3>

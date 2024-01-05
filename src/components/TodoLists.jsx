@@ -53,7 +53,7 @@ export default function TodoLists() {
           />
         );
       })}
-      {currentModal.id && <TaskModal task={currentModal.task}/>}
+      {currentModal.id && <TaskModal task={currentModal.task} setCurrentModal={setCurrentModal}/>}
     </div>
   );
 }
