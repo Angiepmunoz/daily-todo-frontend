@@ -2,19 +2,33 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { modifyDate } from "../helpers/modifyDate";
-import "../styles/todoLists.css"
+import Task from "./Task.jsx";
+import TaskModal from "./TaskModal.jsx";
+import "../styles/todoLists.css";
 
 // const API = process.env.REACT_APP_API;
 export default function TodoLists() {
   const [tasks, setTasks] = useState([]);
+  const [showModal, setShowModal] = useState({});
+  const [currentModal, setCurrentModal] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API}/todo-list/`).then(({ data }) => {
       const tasksWithModifiedDates = modifyDate(data);
       setTasks(tasksWithModifiedDates);
+      const modalInitialStateObj = createModalObj(tasksWithModifiedDates);
+      setShowModal(modalInitialStateObj);
     });
-  });
+  }, []);
+
+  function createModalObj(tasks) {
+    const taskIdObj = {};
+    tasks.forEach((task) => {
+      taskIdObj[task.id] = false;
+    });
+    return taskIdObj;
+  }
 
   function navigateToTask(id) {
     navigate(`/${id}`);
@@ -30,14 +44,16 @@ export default function TodoLists() {
       </div>
       {tasks.map((task, i) => {
         return (
-          <div key={i} className="todo-list-table___column todo-list-table___row">
-            <div className="todo-list-table___column-data" onClick={(id) => navigateToTask(task.id)}>{task.name}</div>
-            <div className="todo-list-table___column-data">{task.due_date}</div>
-            <div className="todo-list-table___column-data">{task.time_of_day}</div>
-            <div className="todo-list-table___column-data">{task.completed ? "✅" : "❌"}</div>
-          </div>
+          <Task
+            key={task.id}
+            task={task}
+            setShowModal={setShowModal}
+            showModal={showModal}
+            setCurrentModal={setCurrentModal}
+          />
         );
       })}
+      {currentModal.id && <TaskModal task={currentModal.task}/>}
     </div>
   );
 }

@@ -1,35 +1,21 @@
-import { Form, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { modifyDate } from "../helpers/modifyDate";
-import axios from "axios";
-
-export default function Task() {
-  const [task, setTask] = useState({});
-  const { id } = useParams();
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API}/todo-list/${id}`)
-      .then(({ data }) => {
-        const tasksWithModifiedDate = modifyDate(data)
-        setTask(tasksWithModifiedDate)
-      });
-  });
-
-  return (
-    <div className="single-task">
-        <div>task.name</div>
-        <div>Due Date</div>
-        <div>task completion</div>
-        <p>Notes</p>
-    </div>
-  )
+export default function Task({ task, setShowModal, showModal, setCurrentModal}) {
+function handleShowModal(id){
+    setShowModal({...showModal, [id]: true})
+    setCurrentModal({id, task})
 }
-
-// id SERIAL PRIMARY KEY,
-// name TEXT NOT NULL,
-// notes TEXT,
-// completed BOOLEAN DEFAULT false,
-// due_date DATE NOT NULL,
-// time_of_day TIME WITHOUT TIME ZONE NOT null,
-// date_of_completion DATE DEFAULT null,
-// weekly BOOLEAN DEFAULT false
+  return (
+    <div className="todo-list-table___column todo-list-table___row">
+      <div
+        className="todo-list-table___column-data"
+        onClick={() => handleShowModal(task.id)}
+      >
+        {task.name}
+      </div>
+      <div className="todo-list-table___column-data">{task.due_date}</div>
+      <div className="todo-list-table___column-data">{task.time_of_day}</div>
+      <div className="todo-list-table___column-data">
+        {task.completed ? "✅" : "❌"}
+      </div>
+    </div>
+  );
+}
