@@ -3,6 +3,7 @@ import { useState } from "react";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 
+
 export default function Calendar() {
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(),
@@ -14,7 +15,18 @@ export default function Calendar() {
     firstDayOfMonth() {
       return new Date(this.year, this.month, 1).getDay();
     },
+    numOfWeeks(){
+      const fdom = this.firstDayOfMonth();
+      const dim = this.numDaysInMonth();
+      if((fdom === 5 && dim === 31) || (fdom === 6 && dim >= 30)) return 6;
+      else return 5;
+    }
   });
+  const currentMonth = {
+    cYear: new Date().getFullYear(),
+    cToday: new Date().getDate(),
+    cMonth: new Date().getMonth(),
+  }
 
   const monthArray = [
     "January",
@@ -37,7 +49,7 @@ export default function Calendar() {
       ? setCalendar({ ...calendar, month: month + 1 })
       : setCalendar({ ...calendar, month: month - 1 });
   }
-
+  console.log(calendar.firstDayOfMonth())
   return (
     <div className="calendar___container">
       <div className="calendar___month-label">
@@ -64,15 +76,23 @@ export default function Calendar() {
           return <div key={i}>{dayOfWeek}</div>;
         })}
       </div>
-      {Array(35)
+      {Array(calendar.numOfWeeks()*7)
         .fill(0)
-        .map((day, i) => {
-          if (i < calendar.firstDayOfMonth() || i > calendar.numDaysInMonth()) {
+        .map((el, i) => {
+          const {month} = calendar
+          const {cMonth, cToday} = currentMonth
+          let firstDayOfMonth = calendar.firstDayOfMonth()
+          let day = i - firstDayOfMonth + 1
+          if (i < firstDayOfMonth || day > calendar.numDaysInMonth()) {
             return <div className="calendar___day-div" key={i}></div>;
+          } else if ( month === cMonth && i === cToday ){
+            return <div className="calendar___day-div" key={i}>
+              <div className="today">{i}</div>
+            </div>
           } else {
             return (
               <div className="calendar___day-div" key={i}>
-                {i}
+                <div>{day}</div>
               </div>
             );
           }
