@@ -1,0 +1,49 @@
+.calendar___container {
+  color: black;
+  display: grid;
+  grid-template-columns: repeat(7, 150px);
+  height: 75%;
+  grid-auto-rows:auto;
+  width: max-content;
+  /* box-shadow: 0px 0px 5px black; */
+  margin: auto;
+  border: 1px solid black;
+}
+.calendar___month-label {
+  grid-column: 1 / span 7;
+  height: 50px;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 5% 90% 5%;
+  align-items: center;
+}
+
+.calendar___days-of-week {
+  grid-column: 1 / span 7;
+  display: grid;
+  grid-template-columns: repeat(7, 150px);
+  text-align: center;
+  /* padding: 5px; */
+  height: 25px;
+}
+.calendar___day-div {
+  text-align: right;
+  border: 1px solid black;
+  padding: 5px;
+  height: 80px;
+}
+
+.number {
+  width: 23.99px;
+}
+
+#disable {
+  pointer-events: none;
+}
+
+.today {
+  text-align: center;
+  color: white;
+  background-color: rgb(13, 59, 102);
+  border-radius: 25px;
+}
