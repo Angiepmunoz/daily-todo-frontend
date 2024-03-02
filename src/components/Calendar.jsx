@@ -1,9 +1,10 @@
 import "../styles/Calendar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import CalendarDay from "./CalendarDay";
-
+import axios from "axios";
+import { modifyDate } from "../utils/modifyDate";
 
 export default function Calendar() {
   const [calendar, setCalendar] = useState({
@@ -16,13 +17,31 @@ export default function Calendar() {
     firstDayOfMonth() {
       return new Date(this.year, this.month, 1).getDay();
     },
-    numOfWeeks(){
+    numOfWeeks() {
       const fdom = this.firstDayOfMonth();
       const dim = this.numDaysInMonth();
-      if((fdom === 5 && dim === 31) || (fdom === 6 && dim >= 30)) return 6;
+      if ((fdom === 5 && dim === 31) || (fdom === 6 && dim >= 30)) return 6;
       else return 5;
-    }
+    },
   });
+  const [tasksByDay, setTasksByDay] = useState({});
+
+  useEffect(() => {
+    const { month, year } = calendar;
+    axios
+      .get(
+        `${import.meta.env.VITE_API}/todo-list/?month=${month + 1}&year=${year}`
+      )
+      .then(({ data }) => {
+        let taskObject = data.reduce((a, c) => {
+          const month = c.due_date.slice(8, 10);
+          a[month] ? a[month].push(c) : (a[month] = [c]);
+          return a;
+        }, {});
+
+        setTasksByDay(taskObject);
+      });
+  }, [calendar.month, calendar.year]);
 
   const monthArray = [
     "January",
@@ -72,12 +91,18 @@ export default function Calendar() {
           return <div key={i}>{dayOfWeek}</div>;
         })}
       </div>
-      {Array(calendar.numOfWeeks()*7)
+      {Array(calendar.numOfWeeks() * 7)
         .fill(0)
         .map((el, i) => {
-          return <CalendarDay key={i} index={i} calendar={calendar} />
+          return (
+            <CalendarDay
+              key={i}
+              index={i}
+              calendar={calendar}
+              tasksByDay={tasksByDay}
+            />
+          );
         })}
     </div>
   );
 }
-
