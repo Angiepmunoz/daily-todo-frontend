@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { modifyDate } from "../helpers/modifyDate";
+import { modifyDate } from "../utils/modifyDate";
 import axios from "axios";
 import "../styles/TaskModal.css";
 
@@ -15,7 +15,7 @@ export default function TaskModal({ task, setCurrentModal }) {
   //       setTask(tasksWithModifiedDate);
   //     });
   // });
-  function handleModalClose(){
+  function handleModalClose() {
     setCurrentModal({});
   }
 
@@ -36,11 +36,13 @@ export default function TaskModal({ task, setCurrentModal }) {
         </div>
         <div className="view-task___body">
           <div className="view-task___body-notes">Notes: {task.notes}</div>
-          <div className="view-task___body-due-date">{task.due_date}</div>
-          <div className="view-task___body-time-due">{task.time_of_day}</div>
+          <div className="view-task___body-due-date">
+            {task.due_date} @ {task.time_of_day}
+          </div>
+          {/* <div className="view-task___body-time-due"></div> */}
         </div>
         <div className="view-task___footer">
-          <Link path={`/${task.id}`}>Show More</Link>
+          <Link to={`/${task.id}`}>Show More</Link>
         </div>
       </div>
     </div>
