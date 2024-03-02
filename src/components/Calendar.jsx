@@ -2,6 +2,7 @@ import "../styles/Calendar.css";
 import { useState } from "react";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+import CalendarDay from "./CalendarDay";
 
 
 export default function Calendar() {
@@ -22,11 +23,6 @@ export default function Calendar() {
       else return 5;
     }
   });
-  const currentMonth = {
-    cYear: new Date().getFullYear(),
-    cToday: new Date().getDate(),
-    cMonth: new Date().getMonth(),
-  }
 
   const monthArray = [
     "January",
@@ -49,7 +45,7 @@ export default function Calendar() {
       ? setCalendar({ ...calendar, month: month + 1 })
       : setCalendar({ ...calendar, month: month - 1 });
   }
-  console.log(calendar.firstDayOfMonth())
+
   return (
     <div className="calendar___container">
       <div className="calendar___month-label">
@@ -79,26 +75,9 @@ export default function Calendar() {
       {Array(calendar.numOfWeeks()*7)
         .fill(0)
         .map((el, i) => {
-          const {month} = calendar
-          const {cMonth, cToday} = currentMonth
-          let firstDayOfMonth = calendar.firstDayOfMonth()
-          let day = i - firstDayOfMonth + 1
-          if (i < firstDayOfMonth || day > calendar.numDaysInMonth()) {
-            return <div className="calendar___day-div" key={i}></div>;
-          } else if ( month === cMonth && i === cToday ){
-            return <div className="calendar___day-div" key={i}>
-              <div className="today">{i}</div>
-            </div>
-          } else {
-            return (
-              <div className="calendar___day-div" key={i}>
-                <div>{day}</div>
-              </div>
-            );
-          }
+          return <CalendarDay key={i} index={i} calendar={calendar} />
         })}
     </div>
   );
 }
 
-// Calendar();
