@@ -4,33 +4,35 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import CalendarDay from "./CalendarDay";
 import axios from "axios";
+import TaskModal from "./TaskModal";
 import { modifyDate } from "../utils/modifyDate";
+import {
+  numDaysInMonth,
+  firstDayOfMonth,
+  numOfWeeks,
+} from "../utils/buildCalendar";
+
+/*****TASK MODAL ISNT WORKING CORRECTLY */
 
 export default function Calendar() {
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(),
     today: new Date().getDate(),
     month: new Date().getMonth(),
-    numDaysInMonth() {
-      return new Date(this.year, this.month + 1, 0).getDate();
-    },
-    firstDayOfMonth() {
-      return new Date(this.year, this.month, 1).getDay();
-    },
-    numOfWeeks() {
-      const fdom = this.firstDayOfMonth();
-      const dim = this.numDaysInMonth();
-      if ((fdom === 5 && dim === 31) || (fdom === 6 && dim >= 30)) return 6;
-      else return 5;
-    },
   });
+
   const [tasksByDay, setTasksByDay] = useState({});
 
   useEffect(() => {
+    const controller = new AbortController();
+    console.log("useEffect ran");
     const { month, year } = calendar;
     axios
       .get(
-        `${import.meta.env.VITE_API}/todo-list/?month=${month + 1}&year=${year}`
+        `${import.meta.env.VITE_API}/todo-list/?month=${
+          month + 1
+        }&year=${year}`,
+        { signal: controller.signal }
       )
       .then(({ data }) => {
         let taskObject = data.reduce((a, c) => {
@@ -38,9 +40,18 @@ export default function Calendar() {
           a[month] ? a[month].push(c) : (a[month] = [c]);
           return a;
         }, {});
-
+        console.log("state is update");
         setTasksByDay(taskObject);
+      })
+      .catch((error) => {
+        error.name === "CanceledError"
+          ? console.log("successfully aborted")
+          : console.log({ error });
       });
+    return () => {
+      console.log("in abort function");
+      controller.abort();
+    };
   }, [calendar.month, calendar.year]);
 
   const monthArray = [
@@ -58,40 +69,47 @@ export default function Calendar() {
     "December",
   ];
 
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const ndim = numDaysInMonth(calendar.year, calendar.month);
+  const fdom = firstDayOfMonth(calendar.year, calendar.month);
+  const calcNumOfWeeks = numOfWeeks(fdom, ndim);
+
   function handleNextOrPrevClick(event) {
     let { month } = calendar;
     event.target.id === "next"
-      ? setCalendar({ ...calendar, month: month + 1 })
+      ? setCalendar({ ...calendar, month: (month + 1) % 11 })
       : setCalendar({ ...calendar, month: month - 1 });
   }
-
+  // console.log(taskModal);
   return (
     <div className="calendar___container">
-      <div className="calendar___month-label">
+      <div className="calendar___month">
         <ArrowBackIosNewOutlinedIcon
-          id={!calendar.month ? "disable" : "back"}
+          id="back"
           onClick={(e) => handleNextOrPrevClick(e)}
         />
-        <div>{monthArray[calendar.month]}</div>
+        <div className="calendar___month-label">
+          {monthArray[calendar.month]}
+        </div>
         <ArrowForwardIosOutlinedIcon
-          id={calendar.month === 11 ? "disable" : "next"}
+          id="next"
           onClick={(e) => handleNextOrPrevClick(e)}
         />
       </div>
       <div className="calendar___days-of-week">
-        {new Array(
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday"
-        ).map((dayOfWeek, i) => {
+        {daysOfWeek.map((dayOfWeek, i) => {
           return <div key={i}>{dayOfWeek}</div>;
         })}
       </div>
-      {Array(calendar.numOfWeeks() * 7)
+      {Array(calcNumOfWeeks * 7)
         .fill(0)
         .map((el, i) => {
           return (

@@ -1,34 +1,43 @@
+import { firstDayOfMonth, numDaysInMonth } from "../utils/buildCalendar";
 
-export default function CalendarDay({ calendar, index, tasksByDay }) {
+export default function CalendarDay({
+  calendar,
+  index,
+  tasksByDay,
+  setTaskModal,
+}) {
+  const { month, year } = calendar;
+  const cYear = new Date().getFullYear();
+  const cToday = new Date().getDate();
+  const cMonth = new Date().getMonth();
 
-  const { month,year } = calendar;
-  const { cMonth, cToday } = {
-    cYear: new Date().getFullYear(),
-    cToday: new Date().getDate(),
-    cMonth: new Date().getMonth(),
-  };
-  const firstDayOfMonth = calendar.firstDayOfMonth();
-  const day = index - firstDayOfMonth + 1;
+  const fdom = firstDayOfMonth(year, month);
+  const ndim = numDaysInMonth(year, month)
+  const calculateDay = `${index - fdom + 1}`;
+  const day = `${calculateDay}`.length === 1 ? `0${calculateDay}` : `${calculateDay}`;
 
 
-  if (index < firstDayOfMonth || day > calendar.numDaysInMonth()) {
+  if (index < fdom || day > ndim) {
     return <div className="calendar___day-div"></div>;
-  } else if (month === cMonth && day === cToday) {
-    return (
-      <div className="calendar___day-div">
-        <div className="today number">{day}</div>
-        {tasksByDay[day] && tasksByDay[day].map((task,i)=> {
-            return <div key={i}>{task.name}</div>
-        })}
-      </div>
-    );
   } else {
     return (
       <div className="calendar___day-div">
-        <div className="number">{day}</div>
-        {tasksByDay[day] && tasksByDay[day].map((task,i)=> {
-            return <div key={i}>{task.name}</div>
-        })}
+        <div
+          className={month === cMonth && day == cToday ? "today number" : "number"}>
+          {day}
+        </div>
+        {tasksByDay[day.length === 1 ? `0${day}` : day] &&
+          tasksByDay[day.length === 1 ? `0${day}` : day].map((task, i) => {
+            return (
+              <div
+                className="calendar___day-div___task"
+                key={i}
+                onClick={() => handleTaskClick(task)}
+              >
+                {task.name}
+              </div>
+            );
+          })}
       </div>
     );
   }
