@@ -83,12 +83,21 @@ export default function Calendar() {
   const calcNumOfWeeks = numOfWeeks(fdom, ndim);
 
   function handleNextOrPrevClick(event) {
-    let { month } = calendar;
+    let { month, year } = calendar;
+
     event.target.id === "next"
-      ? setCalendar({ ...calendar, month: (month + 1) % 11 })
-      : setCalendar({ ...calendar, month: month - 1 });
+      ? setCalendar({
+          ...calendar,
+          month: month === 11 ? 0 : month + 1,
+          year: month === 11 ? year + 1 : year,
+        })
+      : setCalendar({
+          ...calendar,
+          month: month ? (month - 1) % 11 : 11,
+          year: month === 0 ? year -1 : year,
+        });
   }
-  // console.log(taskModal);
+  console.log("calendar:", calendar);
   return (
     <div className="calendar___container">
       <div className="calendar___month">
@@ -97,7 +106,7 @@ export default function Calendar() {
           onClick={(e) => handleNextOrPrevClick(e)}
         />
         <div className="calendar___month-label">
-          {monthArray[calendar.month]}
+          {monthArray[calendar.month]} {calendar.year}
         </div>
         <ArrowForwardIosOutlinedIcon
           id="next"
