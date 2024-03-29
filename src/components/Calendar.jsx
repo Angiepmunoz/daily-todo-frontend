@@ -4,8 +4,6 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import CalendarDay from "./CalendarDay";
 import axios from "axios";
-import TaskModal from "./TaskModal";
-import { modifyDate } from "../utils/modifyDate";
 import {
   numDaysInMonth,
   firstDayOfMonth,

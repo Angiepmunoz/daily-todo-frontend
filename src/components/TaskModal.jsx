@@ -1,7 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { modifyDate } from "../utils/modifyDate";
-import axios from "axios";
 import "../styles/TaskModal.css";
 
 export default function TaskModal({ task, setTaskModal }) {
