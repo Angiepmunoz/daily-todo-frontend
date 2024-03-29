@@ -4,19 +4,10 @@ import { modifyDate } from "../utils/modifyDate";
 import axios from "axios";
 import "../styles/TaskModal.css";
 
-export default function TaskModal({ task, setCurrentModal }) {
-  // const [task, setTask] = useState({});
-  // const { id } = useParams();
-  // useEffect(() => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_API}/todo-list/${id}`)
-  //     .then(({ data }) => {
-  //       const tasksWithModifiedDate = modifyDate(data);
-  //       setTask(tasksWithModifiedDate);
-  //     });
-  // });
+export default function TaskModal({ task, setTaskModal }) {
+  // task = modifyDate(task)
   function handleModalClose() {
-    setCurrentModal({});
+    setTaskModal({});
   }
 
   return (
@@ -37,9 +28,8 @@ export default function TaskModal({ task, setCurrentModal }) {
         <div className="view-task___body">
           <div className="view-task___body-notes">Notes: {task.notes}</div>
           <div className="view-task___body-due-date">
-            {task.due_date} @ {task.time_of_day}
+            {task.formatted_due_date} @ {task.formatted_time}
           </div>
-          {/* <div className="view-task___body-time-due"></div> */}
         </div>
         <div className="view-task___footer">
           <Link to={`/${task.id}`}>Show More</Link>
