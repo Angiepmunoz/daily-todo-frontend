@@ -34,3 +34,7 @@
     font-weight: bolder;
     text-shadow: 5px;
 }
+
+.task-name {
+    overflow: hidden;
+  }

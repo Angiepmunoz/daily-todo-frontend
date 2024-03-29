@@ -1,0 +1,14 @@
+.task-details-section {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+}
+
+
+.task-details-form {
+    margin: 15px;
+    text-align: center;
+    min-height: 450px;
+    background-color: rgb(247, 154, 67);
+    grid-column: 1 / span 4;
+    border-radius: 10px;
+}
