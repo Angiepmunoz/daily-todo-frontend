@@ -23,7 +23,7 @@ export default function CalendarDay({
     return (
       <div className="calendar___day-div">
         <div
-          className={month === cMonth && day == cToday ? "today number" : "number"}>
+          className={month === cMonth && day == cToday && year === cYear? "today number" : "number"}>
           {day}
         </div>
         {tasksByDay[day.length === 1 ? `0${day}` : day] &&
