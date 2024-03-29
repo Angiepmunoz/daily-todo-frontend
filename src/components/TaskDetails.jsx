@@ -18,14 +18,19 @@ export default function TaskDetails() {
   const { id } = useParams();
   const API = import.meta.env.VITE_API;
   useEffect(() => {
+    const controller = new AbortController();
     axios
-      .get(`${API}/todo-list/${id}`)
+      .get(`${API}/todo-list/${id}`, { signal: controller.signal })
       .then(({ data }) => {
         setTask(data);
       })
       .catch((e) => {
         console.warn(e);
       });
+    return () => {
+      console.log("in abort function");
+      controller.abort();
+    };
   }, [id]);
 
   useEffect(() => {
