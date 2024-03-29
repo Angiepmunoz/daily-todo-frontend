@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import { modifyDate, formatDate, formatTime } from "../utils/modifyDate";
+import { formatDate, formatTime } from "../utils/modifyDate";
 
 import axios from "axios";
 import "../styles/TaskDetails.css";
