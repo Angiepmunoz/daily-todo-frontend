@@ -6,18 +6,28 @@ import Task from "./Task.jsx";
 import TaskModal from "./TaskModal.jsx";
 import "../styles/todoLists.css";
 
-
 export default function TodoLists() {
   const [tasks, setTasks] = useState([]);
-  const [currentModal, setCurrentModal] = useState({});
+  const [taskModal, setTaskModal] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API}/todo-list/`).then(({ data }) => {
-      setTasks(modifyDate(data));
-    });
+    const controller = new AbortController();
+    axios
+      .get(`${import.meta.env.VITE_API}/todo-list/`, {
+        signal: controller.signal,
+      })
+      .then(({ data }) => {
+        setTasks(data);
+      })
+      .catch((e) => {
+        console.warn(e);
+      });
+    return () => {
+      console.log("in abort function");
+      controller.abort();
+    };
   }, []);
-
 
   function navigateToTask(id) {
     navigate(`/${id}`);
@@ -32,16 +42,10 @@ export default function TodoLists() {
         <div className="todo-list-table___column-headings">Completed</div>
       </div>
       {tasks.map((task) => {
-        return (
-          <Task
-            key={task.id}
-            task={task}
-            setCurrentModal={setCurrentModal}
-          />
-        );
+        return <Task key={task.id} task={task} setTaskModal={setTaskModal} />;
       })}
-      {currentModal.id && (
-        <TaskModal task={currentModal.task} setCurrentModal={setCurrentModal} />
+      {taskModal.id && (
+        <TaskModal task={taskModal.task} setTaskModal={setTaskModal} />
       )}
     </div>
   );
