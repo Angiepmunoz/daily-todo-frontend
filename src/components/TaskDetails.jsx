@@ -1,12 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { formatDate, formatTime } from "../utils/modifyDate";
-
 import axios from "axios";
 import "../styles/TaskDetails.css";
 
-//NEED TO DO DUE DATE AND TIME OF DAY
-// Need to end the event listener when a user submits changes and when the component unmounts
 
 export default function TaskDetails() {
   const [task, setTask] = useState({});
@@ -160,6 +157,7 @@ export default function TaskDetails() {
         </label>
         {showSave && <button type="submit">Save Changes</button>}
       </form>
+      {/* {showSave ? <Prompt message="Are you sure you want to leave?"/> : null} */}
     </section>
   );
 }
